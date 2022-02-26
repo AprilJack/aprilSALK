@@ -7,7 +7,7 @@
 #' @examples
 #' myGOKmeans_venn()
 
-myGOKmeans_venn <- function(set_num,counts,VennDiagram_obj,name,org,db){
+myGOKmeans_venn <- function(set_num,counts=NULL,VennDiagram_obj,name,org,db){
   library("WebGestaltR")
 
   if(!identical(VennDiagram_obj$..values..[[set_num]],character(0))){
@@ -46,9 +46,10 @@ myGOKmeans_venn <- function(set_num,counts,VennDiagram_obj,name,org,db){
                           organism=org,
                           enrichDatabase ="geneontology_Biological_Process",
                           interestGeneType="genesymbol",
-                          referenceGeneType="refseq_mrna",
+                          #referenceGeneType="refseq_mrna",
                           projectName=sprintf("%s.set.%s.ORA",name,VennDiagram_obj$..set..[set_num]),
-                          referenceGene=as.vector(row.names(counts)),
+                          referenceSet =  "genome_protein-coding",
+                          #referenceGene=as.vector(row.names(counts)),
                           interestGene=as.character(as.data.frame(VennDiagram_obj$..values..[set_num])[,1])),error=function(e) return(NULL) )
     }
     if (!is.null(dim(Up.ORA)[1])) {

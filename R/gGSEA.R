@@ -14,9 +14,9 @@ gGSEA <- function(GSEA,db,name,analysis){
   GSEA$labs <- paste(GSEA$geneSet,GSEA$description, sep=": ")
   }
   GSEA.Sig <- GSEA[GSEA$FDR < 0.05,]
-  GSEA.Sig <- GSEA.Sig[order(GSEA.Sig$NES, decreasing= F),]
-  GSEA.Sig$labs <- factor(GSEA.Sig$labs, levels = GSEA.Sig$labs[order(GSEA.Sig$NES, decreasing= F)])
-  p.GSEA <- ggplot(data=na.omit(GSEA.Sig[1:50,]), aes(x=labs, y=NES, fill=NES)) +
+  GSEA.Sig <- GSEA.Sig[order(GSEA.Sig$normalizedEnrichmentScore, decreasing= F),]
+  GSEA.Sig$labs <- factor(GSEA.Sig$labs, levels = GSEA.Sig$labs[order(GSEA.Sig$normalizedEnrichmentScore, decreasing= F)])
+  p.GSEA <- ggplot(data=na.omit(GSEA.Sig[1:50,]), aes(x=labs, y=normalizedEnrichmentScore, fill=normalizedEnrichmentScore)) +
     geom_bar(stat="identity",col="black") +
     scale_fill_gradient(low="lightskyblue", high="tomato") +
     geom_text(aes(label=signif(FDR, digits = 2)), hjust=1.1, color="white", size=3)+

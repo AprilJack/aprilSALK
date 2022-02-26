@@ -8,7 +8,14 @@
 #' rGSEA()
 
 rGSEA <- function(gsea.df,org,db,name,analysis){
-  igt <- "refseq_mrna"
+
+  print("HEREHHERHEHERHEH")
+  print(gsea.df[1,1])
+  if(stringr::str_starts(gsea.df[1,1],"NM") == TRUE){
+    igt <- "refseq_mrna"
+    print(igt)
+  }else{igt <- "genesymbol";print(igt)}
+
   if(analysis == "Seurat"){
     igt <- "genesymbol"
     mSigDB_2019 <- c("/gpfs/analyses/april/April/ref/mSigDB_2019/c1.all.v7.0.symbols.gmt",
@@ -37,14 +44,13 @@ rGSEA <- function(gsea.df,org,db,name,analysis){
                                  interestGeneType=igt,
                                  projectName=sprintf("%s.%s.%s.GSEA",name,db,analysis),
                                  interestGene=gsea.df,
-                                 nThread = 16 ), error = function(err) {
+                                 nThread = 4 ), error = function(err) {
                                    # error handler picks up where error was generated
                                    print(paste("MY_ERROR:  ",err))
                                    GSEA=NULL
                                    return(GSEA)
                                  })
   }else if(db == "mSigDB"){
-    print("WTF")
     mSigDB_2019 <- c("/gpfs/analyses/april/April/ref/mSigDB_2019/c1.all.v7.0.symbols.gmt",
                      "/gpfs/analyses/april/April/ref/mSigDB_2019/c2.all.v7.0.symbols.gmt",
                      "/gpfs/analyses/april/April/ref/mSigDB_2019/c3.all.v7.0.symbols.gmt",
@@ -79,7 +85,6 @@ rGSEA <- function(gsea.df,org,db,name,analysis){
                                  })
     }
   else{
-      print("here_in_GSEA2")
       GSEA <- tryCatch({WebGestaltR(enrichMethod="GSEA",
                                organism=org,
                                enrichDatabase=db,

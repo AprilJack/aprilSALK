@@ -109,5 +109,5 @@ myExplore <- function(counts,design,colData1,colData2,formulaDE2,ref,name,anno) 
 
   dev.off()
 
-  return(vsd)
+  return(list(dds,vsd))
 }

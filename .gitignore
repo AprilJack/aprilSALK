@@ -1,0 +1,5 @@
+.Rbuildignore
+.RData
+.Rhistory
+.bash-history.log
+.Rproj.user

@@ -9,8 +9,20 @@
 
 rORA <- function(counts,resSig,org,db,name,direction,analysis){
 
- igt <- "refseq_mrna"
- rgt <- "refseq_mrna"
+ print(row.names(counts)[1])
+ if(stringr::str_starts(row.names(counts)[1],"NM") == TRUE | stringr::str_starts(row.names(counts)[1],"NR") == TRUE){
+   rgt <- "refseq_mrna"
+    print(rgt)
+ }else{rgt <- "genesymbol";print(rgt)}
+
+print(row.names(resSig)[1])
+if(stringr::str_starts(row.names(resSig)[1],"NM_") == TRUE | stringr::str_starts(row.names(resSig)[1],"NR_") == TRUE){
+    igt <- "refseq_mrna"
+    print(igt)
+}else{igt <- "genesymbol";print(igt)}
+
+ #igt <- "refseq_mrna"
+ #rgt <- "refseq_mrna"
  if(direction == "UP"){ ig <- row.names(resSig[resSig$logFC > 0,]); rg <- row.names(counts)}
  if(direction == "DN"){ ig <- row.names(resSig[resSig$logFC < 0,]); rg <- row.names(counts)}
  if(direction == "Combined"){ ig <- row.names(resSig); rg <- row.names(counts)}

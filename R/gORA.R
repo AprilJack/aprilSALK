@@ -13,6 +13,7 @@ gORA <- function(ORA,db,name,direction,analysis){
   }else{
    ORA$labs <- paste(ORA$geneSet,ORA$description, sep=": ")
   }
+  print("here")
  ORA.Sig <- ORA[ORA$FDR < 0.05,]
  ORA.Sig <- ORA.Sig[order(ORA.Sig$FDR, decreasing= F),]
  ORA.Sig$labs <- factor(ORA.Sig$labs, levels = ORA.Sig$labs[order(-log(ORA.Sig$FDR))])

@@ -4,7 +4,7 @@
 \alias{myGOKmeans_venn}
 \title{A Venn Diagram GO Analysis Function}
 \usage{
-myGOKmeans_venn(set_num, counts, VennDiagram_obj, name, org)
+myGOKmeans_venn(set_num, counts = NULL, VennDiagram_obj, name, org, db)
 }
 \arguments{
 \item{no}{defaults}

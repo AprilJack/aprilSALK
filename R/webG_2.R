@@ -15,8 +15,8 @@ webG_2 <- function(counts,resSig,org,db,name,gsea.df=NULL){
   #O: the number of genes in the user gene list and also in the category
   #E: The expected number in the category
   #R: ratio of enrichment
-  library(ggplot2)
-  library("WebGestaltR")#,lib.loc = "/gpfs/analyses/april/April/lib/R/library/")
+  #library(ggplot2)
+  #library("WebGestaltR")#,lib.loc = "/gpfs/analyses/april/April/lib/R/library/")
   print("#########################################################")
   print(sprintf("Starting GO Analysis for - %s using %s", name, db))
   print("#########################################################")
@@ -43,14 +43,14 @@ webG_2 <- function(counts,resSig,org,db,name,gsea.df=NULL){
       Combined.ORA <- tryCatch(rORA(counts,resSig,org,db,name,"Combined","edgeR"),error=function(e) return(NULL) )
       if (!is.null(dim(Combined.ORA)[1])) {
         print("...Combined ORA EdgeR Graph...")
-        gORA(Combined.ORA,db,name,"Combined","edgeR")
+        tryCatch(gORA(Combined.ORA,db,name,"Combined","edgeR"),error=function(e) return(NULL) )
       }
     }
     if(!is.null(gsea.df)){
     if(dim(gsea.df)[1] > 10){
       print("...GSEA EdgeR...")
       GSEA <- tryCatch(rGSEA(gsea.df,org,db,name,"edgeR"),error=function(e) return(NULL) )
-      if (!is.null(GSEA[GSEA$FDR < 0.05,]$NES)) {
+      if (!is.null(GSEA[GSEA$FDR < 0.05,]$normalizedEnrichmentScore)) {
         print("...GSEA EdgeR Graph...")
         gGSEA(GSEA,db,name,"edgeR")
       }
@@ -104,7 +104,7 @@ webG_2 <- function(counts,resSig,org,db,name,gsea.df=NULL){
     if(dim(gsea.df)[1] > 10){
       print("...GSEA DESeq2 w Threads...")
       GSEA <- tryCatch(rGSEA(gsea.df,org,db,name,"DESeq2"),error=function(e) return(NULL) )
-      if (!is.null(GSEA[GSEA$FDR < 0.05,]$NES)) {
+      if (!is.null(GSEA[GSEA$FDR < 0.05,]$normalizedEnrichmentScore)) {
         print("...GSEA DESeq2 Graph...")
         gGSEA(GSEA,db,name,"DESeq2")
       }
@@ -144,11 +144,46 @@ webG_2 <- function(counts,resSig,org,db,name,gsea.df=NULL){
       ddd[ddd== -Inf] <- -1000
       ddd[ddd== Inf] <- 1000
       GSEA <- tryCatch(rGSEA(ddd,org,db,name,"Seurat"),error=function(e) return(NULL) )
-      if (!is.null(GSEA[GSEA$FDR < 0.05,]$NES)) {
+      if (!is.null(GSEA[GSEA$FDR < 0.05,]$normalizedEnrichmentScore)) {
         print("...GSEA Seurat3 Graph...")
         gGSEA(GSEA,db,name,"Seurat")
       }
     }
+    }
+  }else if(!is.null(resSig$adj.P.Val)){
+    if(dim(resSig[resSig$adj.P.Val > 0,])[1] > 10){
+      print("...UP ORA SplineTimeR...")
+      Up.ORA <- tryCatch(rORA(counts,resSig,org,db,name,"UP","SplineTimeR"),error=function(e) return(NULL) )
+      if (!is.null(dim(Up.ORA)[1])) {
+        print("...UP ORA SplineTimeR Graph...")
+        gORA(Up.ORA,db,name,"UP","SplineTimeR")
+      }
+    }
+    if(dim(resSig[resSig$adj.P.Val < 0,])[1] > 10){
+      print("...DOWN ORA SplineTimeR...")
+      Down.ORA <- tryCatch(rORA(counts,resSig,org,db,name,"DN","SplineTimeR"),error=function(e) return(NULL) )
+      if (!is.null(dim(Down.ORA)[1])) {
+        print("...DOWN ORA SplineTimeR Graph...")
+        gORA(Down.ORA,db,name,"DN","SplineTimeR")
+      }
+    }
+    if(dim(resSig)[1] > 10){
+      print("...Combined ORA SplineTimeR...")
+      Combined.ORA <- tryCatch(rORA(counts,resSig,org,db,name,"Combined","SplineTimeR"),error=function(e) return(NULL) )
+      if (!is.null(dim(Combined.ORA)[1])) {
+        print("...Combined ORA SplineTimeR Graph...")
+        tryCatch(gORA(Combined.ORA,db,name,"Combined","SplineTimeR"),error=function(e) return(NULL) )
+      }
+    }
+    if(!is.null(gsea.df)){
+      if(dim(gsea.df)[1] > 10){
+        print("...GSEA SplineTimeR...")
+        GSEA <- tryCatch(rGSEA(gsea.df,org,db,name,"SplineTimeR"),error=function(e) return(NULL) )
+        if (!is.null(GSEA[GSEA$FDR < 0.05,]$normalizedEnrichmentScore)) {
+          print("...GSEA SplineTimeR Graph...")
+          gGSEA(GSEA,db,name,"SplineTimeR")
+        }
+      }
     }
   } else{
     print("Please enter a valid DESeq2, EdgeR, Seurat, or MethylSeq object.") }

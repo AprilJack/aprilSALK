@@ -9,12 +9,12 @@
 
 
 meth25bp <- function(methylseqObj = "methy seq obj",nam = "name of exp",gene.obj = gene.obj,org="organism name for WebGestaltR",db="GO db's to query"){
-  library("methylKit")
-  library("genomation")
-  library("ggplot2")
-  library("gplots")
-  library("pheatmap")
-  library("cluster")
+  # library("methylKit")
+  # library("genomation")
+  # library("ggplot2")
+  # library("gplots")
+  # library("pheatmap")
+  # library("cluster")
   pdf(sprintf("%s_plots.pdf",nam),width = 7,height = 7)
   print("---------Filtering methyl object")
   filtered.methylseqObj = filterByCoverage(methylseqObj,lo.count=10,lo.perc=NULL,
